@@ -31,13 +31,9 @@ export default class {
     if (this.store) {
       return this.store
       .bills()
-      
-     // .sort((a, b) => ((a < b) ? 1 : -1))
-
       .list()
-
       .then(snapshot => {
-        let bills = snapshot
+        const bills = snapshot
           .map(doc => {
             try {
               return {
@@ -57,22 +53,6 @@ export default class {
             }
           })
           console.log('length', bills.length)
-          // bills=bills.sort((a, b) => ((a < b) ? 1 : -1))
-          bills=bills.sort((a,b) => {
-          
-            let dateA=new Date (a.date)
-            let dateB=new Date (b.date)
-            if (dateA > dateB) {
-              return -1
-              
-            } else {
-              return 1
-            } 
-          }
-        )
-        bills.forEach(item => {
-          // item.date=formatDate (item.date)
-        })
         return bills
       })
     }
