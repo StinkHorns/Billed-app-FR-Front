@@ -53,7 +53,15 @@ export default class {
             }
           })
           console.log('length', bills.length)
-        return bills
+
+          const rows =  
+          bills.sort(
+              (a, b) => ((a < b) ? 1 : -1)
+            ) 
+          
+
+
+        return rows
       })
     }
   }

@@ -21,7 +21,7 @@ const row = (bill) => {
 
   const rows = (data) => {
     return (data && data.length) ? data.sort(
-      (a, b) => new Date(b.date) - new Date(a.date)
+      (a, b) => ((a < b) ? 1 : -1)
     ).map(bill => row(bill)).join("") : ""
   }
 
