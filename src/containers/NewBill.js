@@ -17,9 +17,25 @@ export default class NewBill {
   }
   handleChangeFile = e => {
     e.preventDefault()
+
+const validExtensions=["jpeg", "jpg", "png"]
+
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
+    console.log (filePath)
+
     const fileName = filePath[filePath.length-1]
+  const extension = fileName.split(".")[1]
+  //console.log (extension)
+
+  if(!validExtensions.includes(extension.toLowerCase())){
+document.getElementById("errorfile").innerText="File Extension Not Valid"
+this.document.querySelector(`input[data-testid="file"]`).value=""
+return 
+  }
+
+  
+
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)

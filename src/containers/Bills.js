@@ -54,14 +54,10 @@ export default class {
           })
           console.log('length', bills.length)
 
-          const rows =  
-          bills.sort(
-              (a, b) => ((a < b) ? 1 : -1)
-            ) 
-          
+     
 
 
-        return rows
+        return bills
       })
     }
   }
