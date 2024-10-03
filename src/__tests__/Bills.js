@@ -1,14 +1,17 @@
 /**
  * @jest-environment jsdom
  */
-
+import mockStore from "../__mocks__/store"
 import {screen, waitFor} from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
 import { ROUTES_PATH} from "../constants/routes.js";
 import {localStorageMock} from "../__mocks__/localStorage.js";
+import userEvent from "@testing-library/user-event";
 
 import router from "../app/Router.js";
+import Bills from "../containers/Bills.js";
+jest.mock("../app/Store", ()=>mockStore)
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
@@ -57,17 +60,29 @@ describe('Given I am connected as an Employee', () => {
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
       }))
-  
+document.body.innerHTML = BillsUI({
+  data: bills
+})
+      const store = null
+      const bill = new Bills({
 
-      const handleClickIconEye = jest.fn(bills.handleClickIconEye)
-      const eye = screen.getByTestId('icon-eye')
-      eye.addEventListener('click', handleClickIconEye)
-      userEvent.click(eye)
+    document, onNavigate, store, localStorage: window.localStorage
+  })
 
-      expect(handleClickIconEye).toHaveBeenCalled()
+      
+      const eye = screen.getAllByTestId('icon-eye')
+      const icon = eye[0]
+      const handleClickIconEye = jest.fn(bill.handleClickIconEye(icon))
+      icon.addEventListener('click', handleClickIconEye)
+      userEvent.click(icon)
+
+      expect(handleClickIconEye(icon)).toHaveBeenCalled()
+
+
 
       const modale = screen.getByTestId('modaleFile')
-      expect(modale).toBeTruthy()
+      $.fn.modal = jest.fn(()=> modale.classList.add("show"))
+      expect(modale.classList).toContain("show")
        
 
     
@@ -136,7 +151,7 @@ describe("When an error occurs on API", () => {
     )
     window.localStorage.setItem('user', JSON.stringify({
       type: 'Employee',
-      email: "a@a"
+     
     }))
     const root = document.createElement("div")
     root.setAttribute("id", "root")

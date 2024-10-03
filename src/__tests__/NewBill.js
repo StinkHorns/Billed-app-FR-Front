@@ -5,6 +5,8 @@
 import { screen } from "@testing-library/dom"
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
+import userEvent from "@testing-library/user-event"
+import { fireEvent } from "@testing-library/dom"
 
 /// 6
 describe("Given I am connected as an employee", () => {
@@ -44,22 +46,22 @@ describe("Given I am connected as an employee", () => {
     test("Then it opens window to select file", () => {
 
       const html = NewBillUI()
-      document.body.innerHTML = NewBillUI(bills[0])
+      document.body.innerHTML = NewBillUI()
 
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
 
       const store = null
-      const bilss = new Bills({
-        document, onNavigate, store, bills, localStorage: window.localStorage
+      const bills = new NewBill({
+        document, onNavigate, store, localStorage: window.localStorage
       })
       
       const chooseFile = screen.getByTestId("file")
-      const sendFile = jest.fn((e) => bills.sendFile(e, bills[0]))
+      const sendFile = jest.fn((e) => bills.handleChangeFile(e))
       chooseFile.addEventListener("click", sendFile)
-      fireEvent.click(sendFile)
-      expect(sendFile).toHaveBeenCalled()
+      fireEvent.click(handleChangeFile)
+      expect(handleChangeFile).toHaveBeenCalled()
 
     })
   })
