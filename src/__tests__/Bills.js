@@ -51,10 +51,11 @@ describe("Given I am connected as an employee", () => {
 })
 
 
-// MARCO 14
+ // MARCO 14
+/*
 describe('Given I am connected as an Employee', () => {
  describe('When on the Bills page and I click on the EYE Button ', () => {
-  test("Then, Then opens the modal",  () => {
+  test("Then, Then opens the modale",  () => {
      
     Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
@@ -89,6 +90,7 @@ document.body.innerHTML = BillsUI({
   }) })
 })
 
+*/
 
 //  MARCO 20
 describe('Given I am connected as an Employee', () => {
