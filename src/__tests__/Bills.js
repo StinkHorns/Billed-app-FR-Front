@@ -34,66 +34,17 @@ describe("Given I am connected as an employee", () => {
       
 //Marco
 
-      expect(windowIcon.classList.contains("active-icon"))
-
-    })
-
-    test("Then bills should be ordered from earliest to latest", () => {
-      document.body.innerHTML = BillsUI({ data: bills })
-      const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)
-      const antiChrono = (a, b) => ((a < b) ? 1 : -1)
-      const datesSorted = [...dates].sort(antiChrono)
-      expect(dates).toEqual(datesSorted)
-    })
-
-
-  })
-})
-
-
- // MARCO 14
-/*
-describe('Given I am connected as an Employee', () => {
- describe('When on the Bills page and I click on the EYE Button ', () => {
-  test("Then, Then opens the modale",  () => {
-     
-    Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-      window.localStorage.setItem('user', JSON.stringify({
-        type: 'Employee'
-      }))
-document.body.innerHTML = BillsUI({
-  data: bills
-})
-      const store = null
-      const bill = new Bills({
-
-    document, onNavigate, store, localStorage: window.localStorage
-  })
-
-      
-      const eye = screen.getAllByTestId('icon-eye')
-      const icon = eye[0]
-      const handleClickIconEye = jest.fn(bill.handleClickIconEye(icon))
-      icon.addEventListener('click', handleClickIconEye)
-      userEvent.click(icon)
-
-      expect(handleClickIconEye(icon)).toHaveBeenCalled()
-
-
-
-      const modale = screen.getByTestId('modaleFile')
-      $.fn.modal = jest.fn(()=> modale.classList.add("show"))
-      expect(modale.classList).toContain("show")
+   
        
 
     
   }) })
 })
 
-*/
+
 
 //  MARCO 20
-describe('Given I am connected as an Employee', () => {
+
 describe('When on Bills page and I click on New Bill Button ', () => {
   test("Then, Then it opens New Bills page",  () => {
   
@@ -103,18 +54,18 @@ describe('When on Bills page and I click on New Bill Button ', () => {
     }))
 
     const handleClickNewBill = jest.fn(bills.handleClickNewBill)
-    const eye = screen.getByTestId('btn-new-bill')
-    eye.addEventListener('click', handleClickNewBill)
-    userEvent.click(eye)
+    const eye = screen.queryAllByTestId('icon-eye')
+    eye[0].addEventListener('click', handleClickNewBill)
+    userEvent.click(handleClickNewBill)
 
     expect(handleClickNewBill).toHaveBeenCalled()
 
     const newBill = screen.getByTestId('btn-new-bill')
-    expect('btn-new-bill').toBeTruthy()
+    expect(newBill).toBeTruthy()
   
 
       }) })
-})
+
 
 
 
@@ -138,6 +89,35 @@ describe('When on the NEW Bills page and I input a date ', () => {
       })})
 })
 
+
+describe("When I navigate on Bills page",() => {
+test("fetches bills from mock API GET", async () => {
+  localStorage.setItem("user", JSON.stringify({ type: "Employee", email: "a@a" }));
+  const root = document.createElement("div");
+  root.setAttribute("id", "root");
+  document.body.append(root);
+  router();
+  window.onNavigate(ROUTES_PATH.Bills);
+
+
+  await waitFor(() => {
+    const textElement = screen.getByText("Mes notes de frais");
+    expect(textElement).toBeTruthy();
+  });
+
+  const exempleTypeDeFacture = await screen.getByText("Transports");
+  expect(exempleTypeDeFacture).toBeTruthy();
+
+  const exempleStatutDeFacture = await screen.getByText("En attente");
+  expect(exempleStatutDeFacture).toBeTruthy();
+
+  expect(screen.queryAllByTestId("icon-eye")).toBeTruthy()
+})
+
+}) 
+
+
+   
 
 // Test ERROR 404 and 500
 

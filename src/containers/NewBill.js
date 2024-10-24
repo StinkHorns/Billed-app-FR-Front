@@ -21,7 +21,7 @@ export default class NewBill {
   handleChangeFile = e => {
     e.preventDefault()
 
-const validExtensions=["jpeg", "jpg", "png"]
+const validExtensions=["image/jpeg", "image/jpg", "image/png"]
 
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)

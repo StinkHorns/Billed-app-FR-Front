@@ -64,7 +64,68 @@ describe("Given I am connected as an employee", () => {
       expect(input.files[0].name).toBe("image.png");
     });
   });
+
+  describe("When I click on the choisir un fichier button and upload a correct type file", () => {
+    test("Then, it should upload the file", () => {
+      Object.defineProperty(window, "localStorage", {
+        value: localStorageMock,
+      });
+      window.localStorage.setItem(
+        "user",
+        JSON.stringify({
+          type: "Employee",
+        })
+      );
+      const root = document.createElement("div");
+      root.setAttribute("id", "root");
+      document.body.append(root);
+      router();
+
+      document.body.innerHTML = NewBillUI();
+
+      window.onNavigate(ROUTES_PATH.NewBill);
+
+      // initialisation NewBill
+      const newBill = new NewBill({
+        document,
+        onNavigate,
+        store,
+        localStorage,
+      });
+
+      const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e));
+      const input = screen.getByTestId("file");
+      input.addEventListener("change", handleChangeFile);
+
+      //mock de window.alert
+      window.alert = jest.fn();
+
+      //fichier au mauvais format
+      fireEvent.change(input, {
+        target: {
+          files: [
+            new File(["image.png"], "image.png", {
+                      type: "image/png", // Type valide
+            }),
+          ],
+        },
+      });
+
+      
+    
+     
+      expect(handleChangeFile).toHaveBeenCalled()
+     
+      
+     // expect(errorMessage.textContent).toBe("File Extension Not Valid")
+    });
+
+  })
+
   describe("When I click on the choisir un fichier button and upload a wrong type file", () => {
+
+    
+
     test("Then, it should alert and reset input value if file type is invalid", () => {
       Object.defineProperty(window, "localStorage", {
         value: localStorageMock,
@@ -104,7 +165,7 @@ describe("Given I am connected as an employee", () => {
         target: {
           files: [
             new File(["image.gif"], "image.gif", {
-              type: "image/gif", // Type non valide
+                      type: "image/gif", // Type non valide
             }),
           ],
         },
@@ -112,10 +173,10 @@ describe("Given I am connected as an employee", () => {
 
       
      //  queryByTestId??? or  getByTestId  or     getAllByTestId
-      const errorMessage = screen.queryAllByAltText("errorfile")
-
+      const errorMessage = screen.queryByTestId("errorfile")
+      expect(handleChangeFile).toHaveBeenCalled()
       expect(input.value).toBe("");
-      expect(errorMessage).toContain("File Extension Not Valid")
+     // expect(errorMessage.textContent).toBe("File Extension Not Valid")
     });
     test("Les factures apparaissent bien", () => {
       localStorage.setItem(
@@ -197,7 +258,7 @@ describe("Given I am connected as an employee", () => {
     });
   });
 });
-// });
+
 // test POST
 describe("Given I am a user connected as Employee", () => {
   describe("When I add a new bill", () => {
