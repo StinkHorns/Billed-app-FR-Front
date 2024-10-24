@@ -1,6 +1,9 @@
 import { ROUTES_PATH } from '../constants/routes.js'
 import Logout from "./Logout.js"
 
+
+
+
 export default class NewBill {
   constructor({ document, onNavigate, store, localStorage }) {
     this.document = document
@@ -24,11 +27,11 @@ const validExtensions=["jpeg", "jpg", "png"]
     const filePath = e.target.value.split(/\\/g)
     console.log (filePath)
 
-    const fileName = filePath[filePath.length-1]
+  const fileName = filePath[filePath.length-1]
   const extension = fileName.split(".")[1]
   //console.log (extension)
 
-  if(!validExtensions.includes(extension.toLowerCase())){
+if(!validExtensions.includes(file.type)){
 document.getElementById("errorfile").innerText="File Extension Not Valid"
 this.document.querySelector(`input[data-testid="file"]`).value=""
 return 
