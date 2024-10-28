@@ -45,30 +45,30 @@ describe("Given I am connected as an employee", () => {
 
 //  MARCO 20
 
-describe('When on Bills page and I click on New Bill Button ', () => {
-  test("Then, Then it opens New Bills page",  () => {
-  
-    Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+describe("When i click on the eye icon", () => {
+  test('Then handleClickIconEye is called, updates the modal content and shows the modal', () => {
+    Object.defineProperty(window, "localStorage", {
+      value: localStorageMock,
+    });
     window.localStorage.setItem('user', JSON.stringify({
-      type: 'Employee'      
+      type: 'Employee'
     }))
-
-    const handleClickNewBill = jest.fn(bills.handleClickNewBill)
-    const eye = screen.queryAllByTestId('icon-eye')
-    eye[0].addEventListener('click', handleClickNewBill)
-    userEvent.click(handleClickNewBill)
-
-    expect(handleClickNewBill).toHaveBeenCalled()
-
-    const newBill = screen.getByTestId('btn-new-bill')
-    expect(newBill).toBeTruthy()
-  
-
-      }) })
-
-
-
-
+    const root = document.createElement("div");
+    root.setAttribute("id", "root");
+    document.body.append(root);
+    router();
+    window.onNavigate(ROUTES_PATH.Bills);
+    document.body.innerHTML = BillsUI({ data: bills });
+    const bill = new Bills({ document, onNavigate, store: null, localStorage });
+    waitFor(() => screen.getAllByTestId("icon-eye"));
+    const spy = jest.spyOn(bill, "handleClickIconEye");
+    const iconEye = screen.getAllByTestId("icon-eye")[0];
+    $.fn.modal = jest.fn();
+    iconEye.click();
+    expect(spy).toBeCalledTimes(1);
+    expect($.fn.modal).toBeCalledWith("show");
+  });
+});
 
 //Marco 36
 describe('Given I am connected as an Employee', () => {
